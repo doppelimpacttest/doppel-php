@@ -31,6 +31,7 @@ final class RunBuilder
     private ?int $pdfCharsSent = null;
     private ?float $temperature = null;
     private ?float $cost = null;
+    private ?string $sdkLanguage = null;
 
     public function __construct(
         private readonly Provider $provider,
@@ -54,6 +55,7 @@ final class RunBuilder
     public function pdfCharsSent(int $v): self { $this->pdfCharsSent = $v; return $this; }
     public function temperature(float $v): self { $this->temperature = $v; return $this; }
     public function cost(float $v): self { $this->cost = $v; return $this; }
+    public function sdkLanguage(string $v): self { $this->sdkLanguage = $v; return $this; }
 
     /** Assemble the payload and deliver it (fire-and-forget). Never throws. */
     public function capture(): void
@@ -93,6 +95,7 @@ final class RunBuilder
                 'completionTokens' => $ct,
                 'totalTokens' => $tt,
                 'durationMs' => $dur,
+                'sdkLanguage' => $this->sdkLanguage,
             ],
             Provider::OpenRouter => [
                 'provider' => 'openrouter',
@@ -109,6 +112,7 @@ final class RunBuilder
                 'durationMs' => $dur,
                 'cost' => $this->cost,
                 'vendor' => $this->vendor,
+                'sdkLanguage' => $this->sdkLanguage,
             ],
             Provider::Google => [
                 'provider' => 'google',
@@ -119,6 +123,7 @@ final class RunBuilder
                 'completionTokens' => $ct,
                 'totalTokens' => $tt,
                 'durationMs' => $dur,
+                'sdkLanguage' => $this->sdkLanguage,
             ],
             Provider::Anthropic => [
                 'prompt' => $this->prompt ?? '',
@@ -130,6 +135,7 @@ final class RunBuilder
                     'latencyMs' => $dur,
                     'tokens' => $tt,
                 ],
+                'sdkLanguage' => $this->sdkLanguage,
             ],
         };
 
